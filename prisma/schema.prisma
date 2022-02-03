@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id      Int      @id @default(autoincrement())
+  primaryEmail String  @unique
+  name    String?
+  secondaryEmail String?
+  phoneNumber String?
+  taxId String?
+  isActive Boolean?
+  createdAt DateTime?
+  updatedAt DateTime?
+  otherInfo String?
+}
+
+
+model Account {
+    id      Int      @id @default(autoincrement())
+    accountId Int @unique
+    userId Int
+    bankCode String
+    pinCode String
+    AccountType String
+    AccountDirection String @default("")
+    otherInfo String @default("")
+    isVerified Boolean @default(false)
+}
+
+
+model Transaction {
+    id      Int      @id @default(autoincrement())
+    transactionId Int @unique
+    accountId Int
+    transactionType String
+    transactionAmount Float
+    transactionDate DateTime
+    transactionDescription String
+}
+
+model Deposit {
+    id      Int      @id @default(autoincrement())
+    transactionId Int @unique
+    userId Int
+    sourceAccountId Int
+    destinationAccountId Int
+    transferAmount Float
+    transferDate DateTime
+    transferDescription String
+    isPending Boolean
+}
+
+model Withdrawal {
+    id      Int      @id @default(autoincrement())
+    transactionId Int @unique
+    userId Int
+    receivingAccountId Int
+    transferAmount Float
+    transferDate DateTime
+    transferDescription String
+    isPending Boolean
+}
+
+model Balance {
+    id      Int      @id @default(autoincrement())
+    userId Int
+    accountId Int
+    balanceAmount Float
+    currency String
+}
